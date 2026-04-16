@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>North Star · 2026–2028</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Newsreader', 'Georgia', serif;
+    background: #FAFAF7;
+    color: #2C2418;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #999;
+  }
+
+  /* Header */
+  .header {
+    padding: 52px 28px 44px;
+    border-bottom: 1px solid rgba(44, 36, 24, 0.06);
+  }
+
+  .header-inner { max-width: 620px; margin: 0 auto; }
+
+  .header-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .header-line { height: 1px; flex: 1; background: rgba(44,36,24,0.08); }
+
+  .header-year {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #8B6914;
+  }
+
+  h1 {
+    font-size: clamp(26px, 5vw, 38px);
+    font-weight: 400;
+    line-height: 1.25;
+    margin-bottom: 20px;
+    font-style: italic;
+    letter-spacing: -0.3px;
+  }
+
+  .header-desc {
+    font-size: 15.5px;
+    line-height: 1.8;
+    color: #6B5E4F;
+    max-width: 540px;
+  }
+
+  /* Progress Overview */
+  .progress-overview {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  .progress-card {
+    padding: 14px 16px;
+    border: 1px solid rgba(44,36,24,0.06);
+    border-radius: 2px;
+    text-align: center;
+  }
+
+  .progress-card .pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .progress-card .plabel {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .progress-bar-bg {
+    height: 3px;
+    background: rgba(44,36,24,0.06);
+    border-radius: 2px;
+    margin-top: 10px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  /* Starting Point */
+  .starting-point {
+    margin-top: 24px;
+    border: 1px solid rgba(44, 36, 24, 0.08);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+
+  .starting-point.open { background: rgba(139, 105, 20, 0.04); }
+
+  .sp-header {
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .sp-toggle {
+    font-size: 12px;
+    color: #999;
+    transition: transform 0.2s;
+  }
+
+  .starting-point.open .sp-toggle { transform: rotate(45deg); }
+
+  .sp-body {
+    display: none;
+    padding: 0 20px 20px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .starting-point.open .sp-body { display: block; }
+
+  .sp-quote {
+    font-size: 15px;
+    line-height: 1.85;
+    color: #4A3F32;
+    font-style: italic;
+    margin-bottom: 14px;
+  }
+
+  .sp-text {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #6B5E4F;
+  }
+
+  /* Content */
+  .content {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 40px 28px;
+  }
+
+  /* Condition Cards */
+  .condition {
+    margin-bottom: 12px;
+    border: 1px solid rgba(44,36,24,0.06);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+
+  .condition-header {
+    padding: 20px 24px;
+    cursor: pointer;
+  }
+
+  .condition-top {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 6px;
+  }
+
+  .condition-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .condition-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .condition-toggle {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: #999;
+    transition: transform 0.2s;
+  }
+
+  .condition.open .condition-toggle { transform: rotate(45deg); }
+
+  .condition h3 { font-size: 18px; font-weight: 400; margin-bottom: 8px; }
+
+  .condition-now {
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #8B7D6B;
+    line-height: 1.6;
+  }
+
+  .condition-now .label { color: #B85C3C; }
+
+  .condition-progress-mini {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mini-bar-bg {
+    flex: 1;
+    height: 2px;
+    background: rgba(44,36,24,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .mini-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  .mini-bar-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #999;
+    min-width: 35px;
+    text-align: right;
+  }
+
+  .condition-body {
+    display: none;
+    padding: 0 24px 24px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .condition.open .condition-body { display: block; }
+
+  .condition-core {
+    padding: 14px 18px;
+    background: rgba(255,255,255,0.6);
+    border-left-width: 2px;
+    border-left-style: solid;
+    margin-bottom: 20px;
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: #4A3F32;
+    font-style: italic;
+  }
+
+  .condition-target {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #2E6B62;
+    margin-bottom: 16px;
+  }
+
+  .layer { margin-bottom: 18px; }
+
+  .layer-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    opacity: 0.8;
+  }
+
+  /* Checkable items */
+  .check-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(44,36,24,0.04);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .check-item:last-child { border-bottom: none; }
+
+  .check-box {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid #D0C8BC;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .check-item.checked .check-box {
+    border-color: var(--check-color);
+    background: var(--check-color);
+  }
+
+  .check-box svg {
+    width: 10px;
+    height: 10px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .check-item.checked .check-box svg { opacity: 1; }
+
+  .check-text {
+    font-size: 14px;
+    line-height: 1.65;
+    color: #4A3F32;
+    transition: all 0.2s;
+  }
+
+  .check-item.checked .check-text {
+    color: #A09888;
+    text-decoration: line-through;
+    text-decoration-color: rgba(160,152,136,0.4);
+  }
+
+  /* Patterns */
+  .patterns-section { margin-top: 44px; }
+
+  .pattern {
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(44,36,24,0.05);
+  }
+
+  .pattern:last-child { border-bottom: none; }
+
+  .pattern-label { display: flex; align-items: center; gap: 10px; }
+  .pattern-dot { color: #B85C3C; font-size: 8px; }
+  .pattern-name { font-size: 15px; font-weight: 500; color: #3D3428; }
+
+  .pattern-desc {
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #6B5E4F;
+    margin: 8px 0 6px 18px;
+  }
+
+  .pattern-rx {
+    font-size: 12px;
+    line-height: 1.6;
+    color: #2E6B62;
+    margin: 0 0 0 18px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Monday Ritual */
+  .monday {
+    margin-top: 44px;
+    background: #2A2318;
+    padding: 32px 28px;
+    border-radius: 2px;
+  }
+
+  .monday-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    color: #8B6914;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .monday-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #6B5E4F;
+    margin-bottom: 20px;
+  }
+
+  .monday-streak {
+    display: inline-block;
+    padding: 4px 10px;
+    background: rgba(139, 105, 20, 0.15);
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #8B6914;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+
+  .monday-q-block {
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(250,248,245,0.05);
+  }
+
+  .monday-q-block:last-of-type { border-bottom: none; }
+
+  .monday-q-header {
+    display: flex;
+    gap: 14px;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+
+  .monday-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #8B6914;
+    min-width: 20px;
+  }
+
+  .monday-text {
+    font-size: 15px;
+    line-height: 1.75;
+    color: #D4C9B8;
+  }
+
+  .monday-input {
+    width: 100%;
+    margin-left: 34px;
+    width: calc(100% - 34px);
+    background: rgba(250,248,245,0.04);
+    border: 1px solid rgba(250,248,245,0.08);
+    border-radius: 2px;
+    padding: 10px 14px;
+    font-family: 'Newsreader', serif;
+    font-size: 14px;
+    color: #D4C9B8;
+    resize: vertical;
+    min-height: 40px;
+    line-height: 1.6;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .monday-input:focus {
+    border-color: rgba(139, 105, 20, 0.4);
+  }
+
+  .monday-input::placeholder { color: rgba(212,201,184,0.3); }
+
+  .monday-save-row {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .monday-save-btn {
+    background: #8B6914;
+    color: #FAF8F5;
+    border: none;
+    padding: 10px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.2s;
+  }
+
+  .monday-save-btn:hover { background: #A07B18; }
+
+  .monday-saved-msg {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #2E6B62;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .monday-saved-msg.show { opacity: 1; }
+
+  .monday-history-toggle {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(250,248,245,0.06);
+    cursor: pointer;
+  }
+
+  .monday-history-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #6B5E4F;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .history-entries { margin-top: 16px; display: none; }
+  .monday-history-toggle.open .history-entries { display: block; }
+
+  .history-entry {
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(250,248,245,0.04);
+  }
+
+  .history-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #8B6914;
+    margin-bottom: 8px;
+  }
+
+  .history-answer {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #8B7D6B;
+    margin-bottom: 4px;
+  }
+
+  .history-answer span { color: #D4C9B8; }
+
+  .monday-footer {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(250,248,245,0.06);
+  }
+
+  .monday-quote {
+    font-size: 13px;
+    color: #6B5E4F;
+    font-style: italic;
+    line-height: 1.7;
+  }
+
+  .monday-cta {
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #8B6914;
+    margin-top: 10px;
+  }
+
+  /* First Move */
+  .first-move {
+    margin-top: 36px;
+    padding: 28px;
+    border: 1px solid rgba(46, 107, 98, 0.2);
+    border-radius: 2px;
+    background: rgba(46, 107, 98, 0.03);
+  }
+
+  .fm-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    color: #2E6B62;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .fm-text { font-size: 15px; line-height: 1.8; color: #3D3428; margin-bottom: 12px; }
+  .fm-reminder { font-size: 14px; line-height: 1.7; color: #6B5E4F; font-style: italic; }
+
+  /* Footer */
+  .footer {
+    margin-top: 48px;
+    padding: 24px 0 52px;
+    border-top: 1px solid rgba(44,36,24,0.06);
+    text-align: center;
+  }
+
+  .footer-year {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #8B6914;
+    letter-spacing: 1.5px;
+  }
+
+  .footer-sub { font-size: 12.5px; color: #999; margin-top: 8px; line-height: 1.6; }
+
+  .reset-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #C0392B;
+    cursor: pointer;
+    opacity: 0.5;
+    margin-top: 12px;
+    display: inline-block;
+  }
+
+  .reset-link:hover { opacity: 1; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 520px) {
+    .header { padding: 36px 20px 32px; }
+    .content { padding: 32px 20px; }
+    .condition-header { padding: 16px 18px; }
+    .condition-body { padding: 0 18px 18px; }
+    .monday { padding: 24px 20px; }
+    .first-move { padding: 22px 20px; }
+    .progress-overview { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-row">
+      <span class="tag">North Star · 2026–2028</span>
+      <div class="header-line"></div>
+      <span class="header-year">GO</span>
+    </div>
+
+    <h1>Operations Architect.<br>Builder of Spaces.</h1>
+
+    <p class="header-desc">
+      You see mess and build systems to clean it. You walk into rooms and make people feel at ease.
+      Your north star isn't a destination — it's four conditions that, once built, let you do this for a living.
+    </p>
+
+    <!-- Progress Overview -->
+    <div class="progress-overview" id="progressOverview"></div>
+
+    <!-- Starting Point -->
+    <div class="starting-point" id="startingPoint" onclick="toggleSection('startingPoint')">
+      <div class="sp-header">
+        <span class="tag" style="color: #8B6914;">The Starting Point — Read This When You Forget</span>
+        <span class="sp-toggle">+</span>
+      </div>
+      <div class="sp-body">
+        <p class="sp-quote">
+          "I have titles but I have work to do with myself. I don't intend to use my past as an excuse. I want to do better."
+        </p>
+        <p class="sp-text">
+          You are not a CMO. You are not a failed CEO. You are someone who spent a decade learning how businesses actually work
+          from the inside — the ugly spreadsheets, the fee structures nobody reads, the cost of 14 months salary in 12. You built
+          tools nobody asked for because you couldn't leave the mess alone. That's not a gap in your résumé. That's your entire
+          value proposition. Stop comparing yourself to people who seem to know everything. They don't. They just don't say it out loud.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+  <p class="tag" style="margin-bottom: 28px;">Four Conditions to Build</p>
+  <div id="conditionsContainer"></div>
+
+  <!-- Patterns -->
+  <div class="patterns-section">
+    <p class="tag" style="margin-bottom: 24px;">The Honest Mirror — Patterns That Cost You Money</p>
+    <div id="patternsContainer"></div>
+  </div>
+
+  <!-- Monday Ritual -->
+  <div class="monday" id="mondayRitual"></div>
+
+  <!-- First Move -->
+  <div class="first-move">
+    <p class="fm-title">The 72-Hour First Move</p>
+    <p class="fm-text">
+      Take the Eyelovin marketplace fee calculator. Strip out Eyelovin-specific data. Make it work with any seller's settlement export.
+      Add a one-page instruction sheet. Share it in one seller community — not as a product launch, just as something you built.
+    </p>
+    <p class="fm-reminder">Don't say "it's nothing special." Just share it and see what happens.</p>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p class="footer-year">GO — 2026</p>
+    <p class="footer-sub">Not a vision board. A construction plan.<br>Built April 2026 · Updated as you move.</p>
+    <span class="reset-link" onclick="resetAll()">reset all progress</span>
+  </div>
+</div>
+
+<script>
+// ============ DATA ============
+const CONDITIONS = [
+  {
+    id: 'ground', num: '01', tag: 'GROUND', color: '#8B6914',
+    title: 'Financial Foundation',
+    now: '~$1K/mo income · ~$2K/mo expenses · months of runway',
+    target: '$10K/month household income',
+    core: 'You only get sharp when the numbers are red. So look at them every week while they\'re still black.',
+    layers: [
+      { name: 'Immediate (30 days)', items: [
+        'Sell the ruko — new agent, active listing, real urgency',
+        'Collect the 400M from Insta — set a payment schedule, not open-ended',
+        'Know exactly how many months of runway remain — write the number down'
+      ]},
+      { name: 'Bridge (90 days)', items: [
+        'Launch marketplace profitability tool as paid template (150–250K IDR)',
+        'Target: 3 paying users in month one — proof it has value',
+        'Explore 1 additional revenue stream using existing skills'
+      ]},
+      { name: 'Foundation (6–12 months)', items: [
+        'Reach $3–5K/mo from diversified sources',
+        'Eyelovin income stabilized under Wella\'s leadership',
+        'Safety net rebuilt: 6 months expenses in accessible savings'
+      ]}
+    ]
+  },
+  {
+    id: 'space', num: '02', tag: 'SPACE', color: '#2E6B62',
+    title: 'Freedom Architecture',
+    now: 'Transitioning from Eyelovin · no clean boundaries yet',
+    target: 'Structured autonomy — freedom with a container',
+    core: 'Freedom without structure is drifting. You need protected time to build, not just open hours to fill.',
+    layers: [
+      { name: 'Clean the exit', items: [
+        'Define exactly what Wella needs from you vs. what you\'re holding out of guilt',
+        'Complete Eyelovin handoff — clean chart of accounts, operational SOPs',
+        'Stop carrying Eyelovin expenses on personal credit card'
+      ]},
+      { name: 'Build the container', items: [
+        'Weekly calendar: protected build blocks for your own projects',
+        'Separate financial tracking: personal vs. Eyelovin — no more mixing',
+        'One venture operating fully under your name within 12 months'
+      ]},
+      { name: 'Design the life', items: [
+        'Travel built into work, not escape from it',
+        'Japan trip with Kyle in July — framed as research, not commitment',
+        'Steam Deck stays — but conscious, not unconscious'
+      ]}
+    ]
+  },
+  {
+    id: 'path', num: '03', tag: 'PATH', color: '#7B4B2A',
+    title: 'Work–Identity Alignment',
+    now: 'Income ≠ identity · skills unrecognized · direction unclear',
+    target: 'Earning from what makes you alive',
+    core: 'You\'re an operations architect who builds systems that make invisible problems visible. That\'s not a hobby — it\'s a career.',
+    layers: [
+      { name: 'What you actually are', items: [
+        'Operations architect — you see mess and build systems to clean it',
+        'Cross-border sourcing operator — import flow, cost structure, channel strategy',
+        'Space designer — physical and emotional environments where people feel at ease'
+      ]},
+      { name: 'Near-term path (tools, not consulting)', items: [
+        'Marketplace profitability calculator → first product',
+        'Import readiness checklist for first-time JP/CN→ID importers → second product',
+        'Eyelovin operational playbooks → templates others could use'
+      ]},
+      { name: 'Long-term pull', items: [
+        'A physical space — clinic, hospitality, experience venue — designed by you',
+        'Japan connection — sourcing, experiences, or cross-border services',
+        'These need capital and runway — earn that first through the tools and systems'
+      ]}
+    ]
+  },
+  {
+    id: 'voice', num: '04', tag: 'VOICE', color: '#6B3A6B',
+    title: 'The Confidence Practice',
+    now: '"I cannot say I\'m the expert" · preemptively lowering expectations',
+    target: 'Put it out before you feel ready. Let the world decide.',
+    core: 'Your most expensive habit isn\'t the Steam Deck. It\'s the voice that says "it\'s not really a pro thing" right before you could share something valuable.',
+    layers: [
+      { name: 'The pattern to break', items: [
+        'You look downward (people who need rescuing) instead of sideways (peers who\'d pay for optimization)',
+        'You preemptively lower expectations so failure doesn\'t sting',
+        'You see everyone around you as smarter — then casually demonstrate knowledge they don\'t have'
+      ]},
+      { name: 'The practice', items: [
+        'Share one tool, insight, or offer every week — without undercutting it',
+        'Let the first person who says "this is useful" be your evidence, not your inner critic',
+        'When the voice says "it\'s nothing special" — that\'s the signal to post, not to stop'
+      ]},
+      { name: 'The evidence (things you built that you minimized)', items: [
+        'Marketplace fee calculator with settlement-derived rates — nobody asked you to build this',
+        'Eyelovin financial audit that surfaced the real cost structure',
+        'Morning briefing dashboard — from scratch, for yourself',
+        'Import playbook — legal vs. door-to-door, sequenced, from experience'
+      ]}
+    ]
+  }
+];
+
+const PATTERNS = [
+  { name: 'The Red Zone Trap', desc: 'Sharp only when bleeding. By then you\'re reacting, not building.', rx: 'Monday: check the number. Every week. Before it finds you.' },
+  { name: 'The Steam Deck Escape', desc: 'Not the gaming — the unconscious retreat from discomfort.', rx: 'Before you pick it up: name what you\'re avoiding. Then decide.' },
+  { name: 'The Planning Plateau', desc: 'You come alive designing. But planning without execution is another escape.', rx: '72-hour rule. Every plan gets a first move within 3 days or it dies.' },
+  { name: 'The Downward Gaze', desc: 'You always find someone to rescue for free. Never someone to serve for pay.', rx: 'This week: name one peer — not struggling, not above you — just a peer.' }
+];
+
+const MONDAY_QUESTIONS = [
+  'What number is in the account right now?',
+  'Did I move any of the four conditions forward?',
+  'What am I avoiding? Name it out loud.',
+  'Did I share or offer something this week — and let it stand without undercutting?',
+  'What is the ONE thing I\'ll do this week that my future self will thank me for?'
+];
+
+// ============ STATE ============
+function loadState() {
+  try {
+    return JSON.parse(localStorage.getItem('northstar_state')) || {};
+  } catch(e) { return {}; }
+}
+
+function saveState(state) {
+  localStorage.setItem('northstar_state', JSON.stringify(state));
+}
+
+function getChecked() {
+  const s = loadState();
+  return s.checked || {};
+}
+
+function setChecked(key, val) {
+  const s = loadState();
+  if (!s.checked) s.checked = {};
+  s.checked[key] = val;
+  saveState(s);
+}
+
+function getMondayEntries() {
+  const s = loadState();
+  return s.mondayEntries || [];
+}
+
+function saveMondayEntry(entry) {
+  const s = loadState();
+  if (!s.mondayEntries) s.mondayEntries = [];
+  s.mondayEntries.unshift(entry);
+  if (s.mondayEntries.length > 52) s.mondayEntries = s.mondayEntries.slice(0, 52);
+  saveState(s);
+}
+
+// ============ RENDER ============
+function getConditionProgress(condId) {
+  const checked = getChecked();
+  const cond = CONDITIONS.find(c => c.id === condId);
+  let total = 0, done = 0;
+  cond.layers.forEach((layer, li) => {
+    layer.items.forEach((item, ii) => {
+      total++;
+      if (checked[`${condId}-${li}-${ii}`]) done++;
+    });
+  });
+  return { total, done, pct: total > 0 ? Math.round((done / total) * 100) : 0 };
+}
+
+function renderProgressOverview() {
+  const container = document.getElementById('progressOverview');
+  container.innerHTML = CONDITIONS.map(c => {
+    const { pct } = getConditionProgress(c.id);
+    return `
+      <div class="progress-card">
+        <div class="pct" style="color: ${c.color}">${pct}%</div>
+        <div class="plabel" style="color: ${c.color}">${c.tag}</div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width: ${pct}%; background: ${c.color}"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderConditions() {
+  const container = document.getElementById('conditionsContainer');
+  const checked = getChecked();
+
+  container.innerHTML = CONDITIONS.map(c => {
+    const { pct, done, total } = getConditionProgress(c.id);
+    return `
+      <div class="condition" id="cond-${c.id}">
+        <div class="condition-header" onclick="toggleSection('cond-${c.id}')">
+          <div class="condition-top">
+            <span class="condition-num" style="color: ${c.color}">${c.num}</span>
+            <span class="condition-tag" style="color: ${c.color}">${c.tag}</span>
+            <span class="condition-toggle">+</span>
+          </div>
+          <h3>${c.title}</h3>
+          <p class="condition-now"><span class="label">now:</span> ${c.now}</p>
+          <div class="condition-progress-mini">
+            <div class="mini-bar-bg">
+              <div class="mini-bar-fill" style="width: ${pct}%; background: ${c.color}"></div>
+            </div>
+            <span class="mini-bar-label">${done}/${total}</span>
+          </div>
+        </div>
+        <div class="condition-body">
+          <div class="condition-core" style="border-left-color: ${c.color}">${c.core}</div>
+          <p class="condition-target">→ ${c.target}</p>
+          ${c.layers.map((layer, li) => `
+            <div class="layer">
+              <p class="layer-title" style="color: ${c.color}">${layer.name}</p>
+              ${layer.items.map((item, ii) => {
+                const key = `${c.id}-${li}-${ii}`;
+                const isChecked = checked[key];
+                return `
+                  <div class="check-item ${isChecked ? 'checked' : ''}" style="--check-color: ${c.color}" onclick="toggleCheck('${key}', '${c.id}')">
+                    <div class="check-box">
+                      <svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 3.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <span class="check-text">${item}</span>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderPatterns() {
+  const container = document.getElementById('patternsContainer');
+  container.innerHTML = PATTERNS.map(p => `
+    <div class="pattern">
+      <div class="pattern-label"><span class="pattern-dot">●</span><span class="pattern-name">${p.name}</span></div>
+      <p class="pattern-desc">${p.desc}</p>
+      <p class="pattern-rx">↳ ${p.rx}</p>
+    </div>
+  `).join('');
+}
+
+function renderMonday() {
+  const container = document.getElementById('mondayRitual');
+  const entries = getMondayEntries();
+  const streak = calculateStreak(entries);
+  const today = new Date();
+  const dayName = today.toLocaleDateString('en-US', { weekday: 'long' });
+  const dateStr = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const isMonday = today.getDay() === 1;
+
+  container.innerHTML = `
+    <p class="monday-title">The Monday Ritual — 15 Minutes, Non-Negotiable</p>
+    <p class="monday-date">${dayName}, ${dateStr}</p>
+    ${streak > 0 ? `<div class="monday-streak">${streak} week${streak > 1 ? 's' : ''} streak</div>` : ''}
+    
+    ${MONDAY_QUESTIONS.map((q, i) => `
+      <div class="monday-q-block">
+        <div class="monday-q-header">
+          <span class="monday-num">${i + 1}.</span>
+          <span class="monday-text">${q}</span>
+        </div>
+        <textarea class="monday-input" id="mq-${i}" placeholder="${isMonday ? 'Write your answer...' : 'Available on Mondays — or whenever you need it'}" rows="2"></textarea>
+      </div>
+    `).join('')}
+
+    <div class="monday-save-row">
+      <button class="monday-save-btn" onclick="saveMonday()">Save This Week</button>
+      <span class="monday-saved-msg" id="savedMsg">Saved ✓</span>
+    </div>
+
+    <div class="monday-history-toggle" id="mondayHistory" onclick="toggleSection('mondayHistory')">
+      <div class="monday-history-label">
+        Past entries (${entries.length}) <span style="font-size: 10px; color: #999;">▾</span>
+      </div>
+      <div class="history-entries">
+        ${entries.length === 0 ? '<p style="font-size: 13px; color: #6B5E4F; padding: 10px 0;">No entries yet. Start this Monday.</p>' :
+          entries.map(e => `
+            <div class="history-entry">
+              <p class="history-date">${e.date}</p>
+              ${e.answers.map((a, i) => a ? `<p class="history-answer"><span>${i + 1}.</span> ${a}</p>` : '').join('')}
+            </div>
+          `).join('')
+        }
+      </div>
+    </div>
+
+    <div class="monday-footer">
+      <p class="monday-quote">"I don't intend to use my past as an excuse. I want to do better."</p>
+      <p class="monday-cta">Then do. Start here. Every Monday.</p>
+    </div>
+  `;
+}
+
+function calculateStreak(entries) {
+  if (entries.length === 0) return 0;
+  let streak = 0;
+  const now = new Date();
+  const currentWeek = getWeekNumber(now);
+  
+  for (let i = 0; i < entries.length; i++) {
+    const entryDate = new Date(entries[i].timestamp);
+    const entryWeek = getWeekNumber(entryDate);
+    const expectedWeek = currentWeek - i;
+    if (entryWeek === expectedWeek || entryWeek === expectedWeek - 1) {
+      streak++;
+    } else {
+      break;
+    }
+  }
+  return streak;
+}
+
+function getWeekNumber(d) {
+  const date = new Date(d);
+  date.setHours(0, 0, 0, 0);
+  date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+  const week1 = new Date(date.getFullYear(), 0, 4);
+  return 1 + Math.round(((date - week1) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+}
+
+// ============ ACTIONS ============
+function toggleSection(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+function toggleCheck(key, condId) {
+  const checked = getChecked();
+  setChecked(key, !checked[key]);
+  renderConditions();
+  renderProgressOverview();
+  event.stopPropagation();
+}
+
+function saveMonday() {
+  const answers = MONDAY_QUESTIONS.map((_, i) => {
+    const el = document.getElementById(`mq-${i}`);
+    return el ? el.value.trim() : '';
+  });
+
+  if (answers.every(a => !a)) return;
+
+  const today = new Date();
+  saveMondayEntry({
+    date: today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+    timestamp: today.toISOString(),
+    answers
+  });
+
+  const msg = document.getElementById('savedMsg');
+  msg.classList.add('show');
+  setTimeout(() => msg.classList.remove('show'), 2000);
+
+  MONDAY_QUESTIONS.forEach((_, i) => {
+    const el = document.getElementById(`mq-${i}`);
+    if (el) el.value = '';
+  });
+
+  renderMonday();
+}
+
+function resetAll() {
+  if (confirm('Reset all progress and Monday entries? This cannot be undone.')) {
+    localStorage.removeItem('northstar_state');
+    renderAll();
+  }
+}
+
+function renderAll() {
+  renderProgressOverview();
+  renderConditions();
+  renderPatterns();
+  renderMonday();
+}
+
+// ============ INIT ============
+renderAll();
+</script>
+
+</body>
+</html>
