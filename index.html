@@ -603,6 +603,92 @@
 
   .reset-link:hover { opacity: 1; }
 
+  /* Morning Devotion */
+  .devotion {
+    margin-bottom: 36px;
+    background: #FFFEF9;
+    border: 1px solid rgba(139, 105, 20, 0.12);
+    border-radius: 2px;
+    padding: 28px 28px 24px;
+  }
+
+  .devotion-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #B8860B;
+    margin-bottom: 4px;
+  }
+
+  .devotion-day {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #999;
+    margin-bottom: 20px;
+  }
+
+  .devotion-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #B8860B;
+    margin-bottom: 10px;
+  }
+
+  .devotion-quote {
+    font-size: 17px;
+    font-style: italic;
+    line-height: 1.7;
+    color: #2C2418;
+    margin-bottom: 6px;
+  }
+
+  .devotion-author {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #B8860B;
+    margin-bottom: 6px;
+  }
+
+  .devotion-nudge {
+    font-size: 13.5px;
+    font-style: italic;
+    color: #6B5E4F;
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  .devotion-divider {
+    height: 1px;
+    background: rgba(139, 105, 20, 0.1);
+    margin: 20px 0;
+  }
+
+  .devotion-scripture {
+    font-size: 16px;
+    font-style: italic;
+    line-height: 1.75;
+    color: #2C2418;
+    border-left: 2px solid #B8860B;
+    padding-left: 18px;
+    margin-bottom: 8px;
+  }
+
+  .devotion-ref {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: #B8860B;
+    padding-left: 20px;
+    margin-bottom: 20px;
+  }
+
+  .devotion-reflection {
+    font-size: 14.5px;
+    line-height: 1.8;
+    color: #4A3F32;
+  }
+
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-4px); }
     to { opacity: 1; transform: translateY(0); }
@@ -661,6 +747,9 @@
 </div>
 
 <div class="content">
+  <!-- Morning Devotion -->
+  <div class="devotion" id="devotionContainer"></div>
+
   <p class="tag" style="margin-bottom: 28px;">Four Conditions to Build</p>
   <div id="conditionsContainer"></div>
 
@@ -693,6 +782,242 @@
 
 <script>
 // ============ DATA ============
+
+const DEVOTIONS = [
+  {
+    quote: '"To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment."',
+    author: 'Ralph Waldo Emerson',
+    nudge: 'The hesitation to take up space fully is not humility — it\'s a habit worth examining today.',
+    scripture: '"For the Spirit God gave us does not make us timid, but gives us power, love and self-discipline."',
+    ref: '2 Timothy 1:7 · NIV',
+    reflection: 'People who spend time with you walk away feeling genuinely seen — that\'s rare, and it comes from how you\'re built, not from effort. But somewhere along the way you started treating your warmth as a liability in high-stakes rooms, as if caring openly makes you less credible. It doesn\'t. The leaders you\'ve most respected were people who combined conviction with genuine regard for others — and that combination is already in you. Today, don\'t trade who you are for who you think the situation demands. Walk in as yourself. That\'s the version people are actually waiting for.'
+  },
+  {
+    quote: '"The only way to do great work is to love what you do. If you haven\'t found it yet, keep looking."',
+    author: 'Steve Jobs',
+    nudge: 'The pull toward Japan, hospitality, designing spaces — those aren\'t distractions. They\'re directions.',
+    scripture: '"For we are God\'s handiwork, created in Christ Jesus to do good works, which God prepared in advance for us to do."',
+    ref: 'Ephesians 2:10 · NIV',
+    reflection: 'There is work that was prepared for you before you even knew to look for it. The things that make you come alive — curating experiences, making people feel welcome, building systems from chaos — those aren\'t random interests. They\'re fingerprints of purpose. The gap between where you are and where you\'re called to be isn\'t a failure. It\'s a runway. Today, pay attention to the work that doesn\'t feel like work. That\'s your compass.'
+  },
+  {
+    quote: '"It is not the critic who counts; not the man who points out how the strong man stumbles. The credit belongs to the man who is actually in the arena."',
+    author: 'Theodore Roosevelt',
+    nudge: 'You\'ve been spectating your own life. Step into the arena today, even imperfectly.',
+    scripture: '"Whatever you do, work at it with all your heart, as working for the Lord, not for human masters."',
+    ref: 'Colossians 3:23 · NIV',
+    reflection: 'You have spent years watching others build while quietly building tools in the background that nobody asked for — and nobody paid for. The marketplace calculator, the audit, the dashboard. Each one was an act of creation you didn\'t give yourself credit for. Today, recognize that building in secret is still building. But at some point, the work has to leave the workshop. Not because it\'s perfect. Because it\'s ready enough. And so are you.'
+  },
+  {
+    quote: '"Have I not commanded you? Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go."',
+    author: 'Joshua 1:9',
+    nudge: 'Courage is not the absence of fear. It\'s naming the fear and moving anyway.',
+    scripture: '"When I am afraid, I put my trust in you. In God, whose word I praise — in God I trust and am not afraid."',
+    ref: 'Psalm 56:3-4 · NIV',
+    reflection: 'The fear of putting a price on your value, the fear of being seen as less than the people around you, the fear that what you\'ve built isn\'t good enough — those fears are real. But they are not facts. Fear tells you where growth is. Every time the voice says \"you\'re not ready,\" ask: ready compared to what? The imaginary standard in your head, or the actual need in front of you? Someone out there is making expensive mistakes that you could prevent in a two-hour conversation. Your fear is not protecting you. It\'s protecting your comfort zone.'
+  },
+  {
+    quote: '"Start where you are. Use what you have. Do what you can."',
+    author: 'Arthur Ashe',
+    nudge: 'You have a decade of experience, real tools you\'ve built, and a network. That\'s not nothing. That\'s everything.',
+    scripture: '"His master replied, \'Well done, good and faithful servant! You have been faithful with a few things; I will put you in charge of many things.\'"',
+    ref: 'Matthew 25:23 · NIV',
+    reflection: 'The parable of the talents isn\'t about having more than others. It\'s about what you do with what you\'ve been given. You\'ve been given operational instincts, cross-border knowledge, the ability to make people comfortable, and a mind that sees systems where others see chaos. Burying those gifts — out of fear, out of comparison, out of the belief that others are smarter — is the one outcome you need to avoid. Today, use one talent. Just one. Share one thing. Offer one insight. Start where you are.'
+  },
+  {
+    quote: '"Comparison is the thief of joy."',
+    author: 'Theodore Roosevelt',
+    nudge: 'The people you think know everything? They\'re just not saying what they don\'t know out loud.',
+    scripture: '"Each one should test their own actions. Then they can take pride in themselves alone, without comparing themselves to someone else."',
+    ref: 'Galatians 6:4 · NIV',
+    reflection: 'You said everyone around you seems smarter. That\'s your filter talking, not reality. The person who taught you about Shopee fees focused on offline because he couldn\'t do what you do online. The people in your EO forum asked you to lead at larger scale — they see something you refuse to see in yourself. Comparison doesn\'t show you the truth. It shows you an edited highlight reel measured against your unedited behind-the-scenes. Today, stop comparing your chapter 5 to someone else\'s chapter 20.'
+  },
+  {
+    quote: '"The Lord is my shepherd, I lack nothing."',
+    author: 'Psalm 23:1',
+    nudge: 'Provision isn\'t just about money. It\'s about trusting that you have what you need for today\'s step.',
+    scripture: '"And my God will meet all your needs according to the riches of his glory in Christ Jesus."',
+    ref: 'Philippians 4:19 · NIV',
+    reflection: 'Your runway is measured in months. That\'s frightening, and it\'s real. But provision has always come — sometimes from unexpected directions, sometimes at the last moment. This is not an excuse to be passive. It\'s permission to act without panic. Panic leads to bad decisions. Faith leads to clear thinking. Today, do the next right thing with your finances: check the number, name the gap, and take one concrete step to close it. Not ten steps. One.'
+  },
+  {
+    quote: '"What you are afraid to do is a clear indicator of the next thing you need to do."',
+    author: 'Ralph Waldo Emerson',
+    nudge: 'What are you avoiding right now? That\'s probably the most important thing on your list.',
+    scripture: '"For God did not give us a spirit of timidity, but a spirit of power, of love, and of self-discipline."',
+    ref: '2 Timothy 1:7 · NIV',
+    reflection: 'Before you reach for the Steam Deck today, pause. Not to judge yourself — but to ask one question: what am I avoiding? The answer might be a difficult conversation with Wella about finances. It might be the discomfort of pricing your own time. It might be the Eyelovin credit card bill sitting unopened. Name it. Write it down. You don\'t have to solve it today. But naming it breaks the spell of avoidance. That\'s where your power starts.'
+  },
+  {
+    quote: '"We are what we repeatedly do. Excellence, then, is not an act, but a habit."',
+    author: 'Aristotle (via Will Durant)',
+    nudge: 'The Monday ritual isn\'t magic. It\'s consistency. Did you do it this week?',
+    scripture: '"Let us not become weary in doing good, for at the proper time we will reap a harvest if we do not give up."',
+    ref: 'Galatians 6:9 · NIV',
+    reflection: 'You come alive in the planning phase — the design, the architecture, the vision. But the gap between who you are and who you want to be isn\'t closed by plans. It\'s closed by small, repeated actions. The Monday check-in. The weekly number. The one share. The one offer. None of these is dramatic. All of them compound. The harvest doesn\'t come from one heroic sprint. It comes from not giving up on the small things when nobody is watching.'
+  },
+  {
+    quote: '"The greatest danger for most of us is not that our aim is too high and we miss it, but that it is too low and we reach it."',
+    author: 'Michelangelo',
+    nudge: 'Selling a 150K template feels small. But the first sale proves something no amount of planning can.',
+    scripture: '"Do not despise these small beginnings, for the Lord rejoices to see the work begin."',
+    ref: 'Zechariah 4:10 · NLT',
+    reflection: 'A marketplace calculator template at 150,000 rupiah feels beneath someone with a decade of experience. That\'s your pride talking — and it\'s the same voice that kept you from charging anything at all. Small beginnings are not small destinations. They\'re proof of motion. The first person who pays you — even a small amount — is worth more than a thousand hours of planning. They prove the market exists. They prove your work has value. They prove the voice that says \"it\'s nothing special\" was wrong. Start small. Start now.'
+  },
+  {
+    quote: '"No one can serve two masters. Either you will hate the one and love the other, or you will be devoted to the one and despise the other."',
+    author: 'Matthew 6:24',
+    nudge: 'Eyelovin expenses on your personal credit card — that\'s not devotion, it\'s a blurred boundary. Clean it today.',
+    scripture: '"Suppose one of you wants to build a tower. Won\'t you first sit down and estimate the cost to see if you have enough money to complete it?"',
+    ref: 'Luke 14:28 · NIV',
+    reflection: 'You\'ve been carrying Eyelovin\'s expenses on your personal credit card while earning less than $1,000 a month. That isn\'t generosity — it\'s a boundary problem. And it\'s making your financial picture muddier than it needs to be. Today, separate what is yours from what is the business\'s. Not as an act of pulling away from Wella, but as an act of clarity. Clear finances lead to clear thinking. Clear thinking leads to better decisions. For both of you.'
+  },
+  {
+    quote: '"He who has a why to live can bear almost any how."',
+    author: 'Friedrich Nietzsche',
+    nudge: 'Your why isn\'t money. It\'s building spaces where people feel at ease. The money is how you sustain the why.',
+    scripture: '"Where there is no vision, the people perish."',
+    ref: 'Proverbs 29:18 · KJV',
+    reflection: 'You have always struggled with vision — the kind that asks you to project five years ahead into fog. But you don\'t need a destination. You need a direction. And your direction has been consistent for years even if you didn\'t name it: you build environments — physical, digital, emotional — where people feel organized, welcomed, and at ease. That\'s your why. The financial target, the tools, the Japan trip — those are all hows. They will shift and change. The why stays. Hold onto it.'
+  },
+  {
+    quote: '"You miss 100% of the shots you don\'t take."',
+    author: 'Wayne Gretzky',
+    nudge: 'The template you haven\'t shared, the call you haven\'t made, the offer you haven\'t extended — those are all unshot shots.',
+    scripture: '"Commit to the Lord whatever you do, and he will establish your plans."',
+    ref: 'Proverbs 16:3 · NIV',
+    reflection: 'You know someone right now — not a struggling friend, not a genius above you — just a peer running a business on marketplace who has never calculated their real margin. You know this because you were that person until you built the tool yourself. The shot you need to take isn\'t a sales pitch. It\'s a message that says: \"I built something that helped me understand my actual profitability. Want me to show you?\" That\'s it. One message. One shot. Take it today.'
+  },
+  {
+    quote: '"Humility is not thinking less of yourself, it\'s thinking of yourself less."',
+    author: 'C.S. Lewis',
+    nudge: 'Self-deprecation disguised as humility is still self-focus. True humility serves without apology.',
+    scripture: '"Do nothing out of selfish ambition or vain conceit. Rather, in humility value others above yourselves."',
+    ref: 'Philippians 2:3 · NIV',
+    reflection: 'There\'s a version of humility that serves others — and a version that just keeps you small. When you say \"I can\'t say I\'m the expert\" before sharing something genuinely useful, you\'re not being humble. You\'re protecting yourself from judgment. Real humility doesn\'t add disclaimers. It serves and lets the work speak. Today, if you help someone, don\'t preface it with \"I\'m not sure if this is helpful, but...\" Just help. The undercutting is about you, not them.'
+  },
+  {
+    quote: '"The best time to plant a tree was 20 years ago. The second best time is now."',
+    author: 'Chinese Proverb',
+    nudge: 'You didn\'t start this journey earlier. That\'s done. What you do today is what matters.',
+    scripture: '"Forget the former things; do not dwell on the past. See, I am doing a new thing! Now it springs up; do you not perceive it?"',
+    ref: 'Isaiah 43:18-19 · NIV',
+    reflection: 'You said you don\'t intend to use your past as an excuse. Good. Because the past gave you something precious even if it didn\'t feel that way: the textile business taught you what you don\'t want. Eyelovin taught you how businesses really work from the inside. The mistakes with money taught you why the Monday number matters. None of it was wasted. All of it was preparation. The tree you plant today — even a small one — is the right tree at the right time. Plant it.'
+  },
+  {
+    quote: '"A ship in harbor is safe, but that is not what ships are built for."',
+    author: 'John A. Shedd',
+    nudge: 'The Steam Deck is a harbor. Comfortable. Safe. But you weren\'t built to stay docked.',
+    scripture: '"Be strong and take heart, all you who hope in the Lord."',
+    ref: 'Psalm 31:24 · NIV',
+    reflection: 'There is nothing wrong with rest. There is nothing wrong with play. The Steam Deck is fine when it\'s chosen consciously — after a day well-spent, as genuine recreation. But you know the difference between rest and retreat. When you reach for the device because the gap between who you are and what you\'re doing feels too uncomfortable to sit with — that\'s not rest. That\'s anesthesia. Today, before you dock: ask what sea you\'re avoiding. Then decide if you\'d rather sail or sleep.'
+  },
+  {
+    quote: '"God doesn\'t call the qualified. He qualifies the called."',
+    author: 'Mark Batterson',
+    nudge: 'You don\'t need a consulting certificate. You need one person who benefits from what you already know.',
+    scripture: '"But he said to me, \'My grace is sufficient for you, for my power is made perfect in weakness.\'"',
+    ref: '2 Corinthians 12:9 · NIV',
+    reflection: 'You keep waiting to feel qualified before you offer what you know. But qualification doesn\'t come from credentials — it comes from scars. You\'ve run a business through a net loss and survived it. You\'ve navigated cross-border import in a country where the rules change constantly. You\'ve managed family dynamics in a business context that would break most people. These aren\'t resume lines. They\'re qualifications earned the hard way. Stop waiting to be called. You\'ve already been called. Now answer.'
+  },
+  {
+    quote: '"The cave you fear to enter holds the treasure you seek."',
+    author: 'Joseph Campbell',
+    nudge: 'Putting a price on your work is the cave. The treasure is proving to yourself that you\'re worth it.',
+    scripture: '"I can do all this through him who gives me strength."',
+    ref: 'Philippians 4:13 · NIV',
+    reflection: 'The thing you\'re most afraid of isn\'t failure. It\'s succeeding — because success would mean you were wrong about yourself all along. It would mean the voice that says \"everyone is smarter\" was lying. It would mean you have to show up fully, without disclaimers, without escape hatches. That\'s terrifying. And it\'s exactly where your breakthrough lives. Today, move one inch toward the thing you\'re avoiding. You don\'t have to conquer the cave. Just stand at the entrance. That\'s enough for today.'
+  },
+  {
+    quote: '"Tell me, what is it you plan to do with your one wild and precious life?"',
+    author: 'Mary Oliver',
+    nudge: 'Not what you plan to plan. What you plan to do. There\'s a difference, and you know it.',
+    scripture: '"Teach us to number our days, that we may gain a heart of wisdom."',
+    ref: 'Psalm 90:12 · NIV',
+    reflection: 'Your children will only be this age once. Your energy will only be this available for so long. The ruko will only hold its value for so long. The window to build something new is open now — not forever. This is not meant to create panic. It\'s meant to create clarity. Numbering your days isn\'t morbid. It\'s honest. It helps you stop deferring the important things because the urgent things feel safer to manage. Today, ask: is what I\'m doing with my time worthy of the life I\'ve been given?'
+  },
+  {
+    quote: '"Integrity is choosing courage over comfort; choosing what is right over what is fun, fast, or easy."',
+    author: 'Brené Brown',
+    nudge: 'The fun thing today might be avoiding the hard conversation. The right thing is having it.',
+    scripture: '"The righteous person may have many troubles, but the Lord delivers him from them all."',
+    ref: 'Psalm 34:19 · NIV',
+    reflection: 'Wella is stressed. You\'re underpaid. Eyelovin\'s costs are still tangled with your personal finances. There are conversations that need to happen — about money, about boundaries, about the next chapter. These conversations feel dangerous because you are wired to keep people comfortable. But real care isn\'t avoiding discomfort. It\'s creating clarity, even when clarity stings. Today, choose one conversation you\'ve been putting off. You don\'t have to solve everything in it. Just start it.'
+  },
+  {
+    quote: '"The meaning of life is to find your gift. The purpose of life is to give it away."',
+    author: 'Pablo Picasso',
+    nudge: 'You\'ve found the gift: building systems, welcoming people, curating experiences. Now give it away — but let them pay for it.',
+    scripture: '"Each of you should use whatever gift you have received to serve others, as faithful stewards of God\'s grace in its various forms."',
+    ref: '1 Peter 4:10 · NIV',
+    reflection: 'Stewardship means tending what you\'ve been given — not burying it, not giving it all away for free, but deploying it wisely. You have a gift for making invisible problems visible and messy spaces functional. Giving it away for free to struggling friends feels good in the moment, but it\'s poor stewardship of a scarce resource: your time, your expertise, your family\'s financial stability. Giving your gift away doesn\'t mean giving it away for nothing. A doctor serves patients and charges for it. So can you.'
+  },
+  {
+    quote: '"Your margin is someone else\'s opportunity."',
+    author: 'Jeff Bezos (adapted)',
+    nudge: 'The margin you\'re not tracking is the money someone else — a marketplace, an algorithm — is keeping.',
+    scripture: '"The plans of the diligent lead to profit as surely as haste leads to poverty."',
+    ref: 'Proverbs 21:5 · NIV',
+    reflection: 'You built a calculator that showed Eyelovin was losing money on SKUs it thought were profitable. That single insight is worth more than a month of someone\'s guesswork. The marketplace takes its cut quietly — through fees, vouchers, settlement delays, commissions — and most sellers never sit down to calculate the real number. You did. And then you said \"that is so easy and so visible.\" It\'s easy for you. That\'s the whole point. What\'s obvious to you is invisible to them. That gap is your business.'
+  },
+  {
+    quote: '"I have been crucified with Christ and I no longer live, but Christ lives in me."',
+    author: 'Galatians 2:20',
+    nudge: 'Your identity isn\'t CEO, CMO, or any title. It\'s something deeper — and titles can\'t take it away.',
+    scripture: '"See what great love the Father has lavished on us, that we should be called children of God! And that is what we are!"',
+    ref: '1 John 3:1 · NIV',
+    reflection: 'You carry the weight of titles that don\'t quite fit — CEO of a business you\'re stepping back from, GM of a family business you didn\'t choose. But your identity was never in the titles. Your forum saw it clearly: sincere, kind, creative, a natural leader. Those aren\'t performance reviews. They\'re descriptions of who you are when you stop performing. Today, release the title. Hold the identity. You are not what you produce. You are who you are — and who you are is enough to build from.'
+  },
+  {
+    quote: '"Every morning brings new potential, but if you dwell on the misfortunes of the day before, you tend to overlook tremendous opportunities."',
+    author: 'Harvey Mackay',
+    nudge: 'Yesterday\'s shortfall doesn\'t define today\'s potential. Look forward. The number can change.',
+    scripture: '"Because of the Lord\'s great love we are not consumed, for his compassions never fail. They are new every morning; great is your faithfulness."',
+    ref: 'Lamentations 3:22-23 · NIV',
+    reflection: 'New every morning. Not new every year, not new when you finally have it figured out — new every morning. The financial pressure is real. The confidence gap is real. But today is a reset. The question isn\'t whether yesterday was good enough. The question is: what is the one thing I can do today that moves me forward? Not ten things. One thing. Make the call. Send the message. Check the number. Share the tool. One thing. That\'s today\'s assignment.'
+  },
+  {
+    quote: '"Don\'t ask what the world needs. Ask what makes you come alive, and go do it. Because what the world needs is people who have come alive."',
+    author: 'Howard Thurman',
+    nudge: 'You come alive when you architect experiences and spaces. Follow that, not someone else\'s definition of success.',
+    scripture: '"Delight yourself in the Lord, and he will give you the desires of your heart."',
+    ref: 'Psalm 37:4 · NIV',
+    reflection: 'The clinic that excited you. The basement room you\'re designing. The EO events where you see joy on people\'s faces. The farm where people are welcomed. These aren\'t distractions from your \"real\" career. They are your real career — waiting to be built. The gap isn\'t between your dreams and reality. It\'s between your dreams and your willingness to fund them step by step, starting with what you can do today. Come alive first. The path reveals itself to people who are moving.'
+  },
+  {
+    quote: '"Worry does not empty tomorrow of its sorrow, it empties today of its strength."',
+    author: 'Corrie ten Boom',
+    nudge: 'The 300 million spend. The credit card bill. The runway. Name the worry, then set it down for one hour and build.',
+    scripture: '"Therefore do not worry about tomorrow, for tomorrow will worry about itself. Each day has enough trouble of its own."',
+    ref: 'Matthew 6:34 · NIV',
+    reflection: 'Your mind runs scenarios constantly — the ruko that isn\'t selling, the Insta money that isn\'t coming, the runway shrinking. That vigilance kept you alive in tough seasons. But there\'s a line between prudent awareness and anxious paralysis. When worry becomes the thing you do instead of the thing that helps you do, it\'s stealing your strength. Today, give yourself one protected hour. No financial mental math. No catastrophizing. Just build something. The worry will still be there when you\'re done — but you\'ll be stronger to face it.'
+  },
+  {
+    quote: '"The only person you are destined to become is the person you decide to be."',
+    author: 'Ralph Waldo Emerson',
+    nudge: 'Operations Architect. Builder of Spaces. You decided this. Now live into it.',
+    scripture: '"And we know that in all things God works for the good of those who love him, who have been called according to his purpose."',
+    ref: 'Romans 8:28 · NIV',
+    reflection: 'All things — the textile business you didn\'t choose, the Eyelovin struggles, the financial pressure, the confidence gap — all things are being worked into something. Not because the pain was good, but because nothing is wasted in the hands of someone who uses everything. Your decade of operator experience isn\'t a sunk cost. It\'s a foundation. Your warmth isn\'t a weakness. It\'s a differentiator. Your eye for systems isn\'t a quirk. It\'s a superpower. Today, decide who you\'re becoming — and take one step as that person.'
+  },
+  {
+    quote: '"Success is not final, failure is not fatal: it is the courage to continue that counts."',
+    author: 'Winston Churchill',
+    nudge: 'Eyelovin\'s struggles aren\'t your obituary. They\'re your tuition.',
+    scripture: '"Consider it pure joy, my brothers and sisters, whenever you face trials of many kinds, because you know that the testing of your faith produces perseverance."',
+    ref: 'James 1:2-3 · NIV',
+    reflection: 'You called yourself a failure for not being able to grow Eyelovin while not taking salary. But what you actually did was hold a business together through financial distress while protecting your wife\'s dream and learning — viscerally — how cost structures kill companies silently. That\'s not failure. That\'s an MBA earned in blood. The question isn\'t whether you failed. The question is what you do with what you learned. And what you learned is rare and valuable. Don\'t bury it. Deploy it.'
+  },
+  {
+    quote: '"Be faithful in small things because it is in them that your strength lies."',
+    author: 'Mother Teresa',
+    nudge: 'The Monday ritual. The weekly number check. The one share. Small things. Your strength is built here.',
+    scripture: '"Whoever can be trusted with very little can also be trusted with much."',
+    ref: 'Luke 16:10 · NIV',
+    reflection: 'You want to build a clinic someday. You want to design hospitality spaces. You want to connect Japan and Indonesia in a business that feels like you. Those are big visions — and they\'re real. But they\'re built on a foundation of small faithfulness: checking your bank balance every Monday, sharing one insight without undercutting it, having one honest conversation about money this week. The person who is faithful in the small, unsexy, unglamorous rituals is the person who gets trusted with the big ones. Be that person today.'
+  }
+];
+
 const CONDITIONS = [
   {
     id: 'ground', num: '01', tag: 'GROUND', color: '#8B6914',
@@ -703,7 +1028,7 @@ const CONDITIONS = [
     layers: [
       { name: 'Immediate (30 days)', items: [
         'Sell the ruko — new agent, active listing, real urgency',
-        'Collect the 400M from Insta — set a payment schedule, not open-ended',
+        'Collect the 400M from Eyelovin — set a payment schedule, not open-ended',
         'Know exactly how many months of runway remain — write the number down'
       ]},
       { name: 'Bridge (90 days)', items: [
@@ -1060,7 +1385,41 @@ function resetAll() {
   }
 }
 
+function renderDevotion() {
+  const container = document.getElementById('devotionContainer');
+  const today = new Date();
+  const startOfYear = new Date(today.getFullYear(), 0, 0);
+  const diff = today - startOfYear;
+  const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const index = dayOfYear % DEVOTIONS.length;
+  const d = DEVOTIONS[index];
+  
+  const dayName = today.toLocaleDateString('en-US', { weekday: 'long' });
+  const dateStr = today.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  container.innerHTML = `
+    <p class="devotion-label">Morning Devotion</p>
+    <p class="devotion-date">${dayName}, ${dateStr}</p>
+    
+    <div style="margin-bottom: 20px;">
+      <p class="devotion-label" style="margin-top: 16px;">Word of Wisdom</p>
+      <p class="devotion-quote">${d.quote}</p>
+      <p class="devotion-author">— ${d.author}</p>
+      <p class="devotion-nudge">${d.nudge}</p>
+    </div>
+
+    <div class="devotion-divider"></div>
+
+    <p class="devotion-label" style="margin-top: 16px;">Scripture & Reflection</p>
+    <p class="devotion-scripture">${d.scripture}</p>
+    <p class="devotion-ref">${d.ref}</p>
+
+    <p class="devotion-reflection">${d.reflection}</p>
+  `;
+}
+
 function renderAll() {
+  renderDevotion();
   renderProgressOverview();
   renderConditions();
   renderPatterns();
